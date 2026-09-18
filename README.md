@@ -25,7 +25,7 @@ herdr's built-in system notifications (`[ui.toast] delivery = "system"`) are sen
 ## Install
 
 ```bash
-# 1. Install the plugin
+# 1. Install the plugin (add --ref v0.1.0 to pin a release)
 herdr plugin install rubenbelem/warp-herdr-notifications
 
 # 2. Install terminal-notifier and allow its notifications
@@ -61,6 +61,19 @@ The action writes its output to the plugin log (`herdr plugin log list --plugin 
 ```bash
 bash ~/.config/herdr/plugins/github/warp-herdr-notifications-*/scripts/setup.sh
 ```
+
+### What this plugin runs
+
+herdr does not review or sandbox plugins, so here is everything this one does. Read `herdr-plugin.toml` and `scripts/` before you install.
+
+| Entry point | When | What it does |
+|---|---|---|
+| `scripts/notify.sh` | Every `pane.agent_status_changed` event | Reads the event, calls `herdr agent get`, and runs `terminal-notifier`. On click: `open` (Warp URL), `herdr agent focus`, `herdr tab focus`. |
+| `setup` action | Only when you run it | May run `brew install terminal-notifier`. Copies the app to `~/Applications`, registers it with Launch Services, asks for notification permission. |
+| `test` action | Only when you run it | Sends one test notification for the focused pane. |
+| `install-herdr-sounds` action | Only when you run it | Downloads two MP3 files from `raw.githubusercontent.com/herdrdev/herdr`, writes AIFF files to `~/Library/Sounds`. |
+
+It keeps settings in the plugin config directory and optional debug files in the plugin state directory. It writes nothing to the plugin install folder. No network access, except the `setup` and `install-herdr-sounds` actions.
 
 ## Configuration
 
@@ -153,6 +166,15 @@ SOUND_DONE="HerdrDone"
 
 ```bash
 herdr plugin uninstall warp-herdr-notifications
+```
+
+Uninstall keeps your settings and the files the actions created. To remove them too:
+
+```bash
+rm -rf ~/.config/herdr/plugins/config/warp-herdr-notifications \
+       ~/.local/state/herdr/plugins/warp-herdr-notifications
+rm -f ~/Library/Sounds/HerdrDone.aiff ~/Library/Sounds/HerdrInput.aiff
+rm -rf ~/Applications/terminal-notifier.app   # only if nothing else uses it
 ```
 
 Then set `[ui.toast] delivery` back to `"system"` or `"herdr"`, and `[ui.sound] enabled` back to `true`, if you want herdr's own notifications and sounds.
