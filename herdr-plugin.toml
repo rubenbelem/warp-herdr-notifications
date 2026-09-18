@@ -1,0 +1,28 @@
+id = "warp-herdr-notifications"
+name = "Warp Herdr Notifications"
+version = "0.1.0"
+min_herdr_version = "0.9.0"
+description = "Clickable macOS notifications for herdr agents: a click opens the exact Warp tab and focuses the agent pane"
+platforms = ["macos"]
+
+[[events]]
+on = "pane.agent_status_changed"
+command = ["bash", "scripts/notify.sh"]
+
+[[actions]]
+id = "setup"
+title = "Warp notifications: set up terminal-notifier"
+contexts = ["global"]
+command = ["bash", "scripts/setup.sh"]
+
+[[actions]]
+id = "test"
+title = "Warp notifications: send a test notification"
+contexts = ["global"]
+command = ["bash", "scripts/notify.sh", "--test"]
+
+[[actions]]
+id = "install-herdr-sounds"
+title = "Warp notifications: install herdr's own sounds"
+contexts = ["global"]
+command = ["bash", "scripts/install-herdr-sounds.sh"]
