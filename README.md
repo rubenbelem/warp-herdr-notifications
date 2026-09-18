@@ -59,10 +59,8 @@ If permission is still not granted, open **System Settings → Notifications →
 The action writes its output to the plugin log (`herdr plugin log list --plugin warp-herdr-notifications`). To see the output directly, run the script from a terminal:
 
 ```bash
-bash ~/.local/share/herdr/plugins/*/warp-herdr-notifications*/scripts/setup.sh
+bash ~/.config/herdr/plugins/github/warp-herdr-notifications-*/scripts/setup.sh
 ```
-
-(The install folder can differ. `herdr plugin list` shows where the plugin is.)
 
 ## Configuration
 
